@@ -2,34 +2,42 @@
 #include <cstdlib>
 #include <iostream>
 #include <list>
-#include "Point.hpp"
+#include "cdpoint.hpp"
 
 using namespace std;
-using namespace point;
+using namespace cdpoint;
 
 
-void fillSet(list<Point>& set, int size){
+cdpoint::cdpoint* fillSet(cdpoint::cdpoint *set, int size){
 	
 	for(int i = 0; i < size; i++){
 		//Create and add a coordinate pair to each entry in the set
 		
-		Point coordPair = Point( 						// Generate a number between 0 and 99, then subtract 50 to create semi-random negative values
+		cdpoint::cdpoint coordPair = cdpoint::cdpoint( 						// Generate a number between 0 and 99, then subtract 50 to create semi-random negative values
 								((rand() % 100) - 50),	// = x
 								((rand() % 100) - 50)	// = y
 								);
 		cout << "Adding coordPair " << coordPair << " to the set." << endl;
-		set.push_back(coordPair);
+		set[i] = coordPair;
 		
 	}
 	cout << "Total number of points added: " << size << endl;
 	
+	return set;
+	
 }
 
-void bruteForceCH(list<Point>& set, int size, list<Point>& result){
+cdpoint::cdpoint* bruteForceCH(cdpoint::cdpoint *set, int size){
+	
+	//Create a set to store the convex hull
+	list<cdpoint::cdpoint> convexhull;
+	cdpoint::cdpoint *answer;
+	answer = convexhull;
+	
 	//Choose a point to form the base of the line segment
 	for(int i = 0; i < size - 1; i++){
 		cout << "i = " << i << endl;
-		cout << "EXAMINING STARTING POINT (" << set[i].x << "," << set[i].y << ") ----------" << endl;
+		cout << "EXAMINING STARTING POINT " << set[i] <<  " ----------" << endl;
 		
 		//Pick the next point to draw the line segment to
 		//We always pick 1 entry ahead of i because a segment from i to j is the same as j to i
@@ -37,15 +45,15 @@ void bruteForceCH(list<Point>& set, int size, list<Point>& result){
 			
 			cout << "j = " << j << endl;
 			//bool isLine = false;	// This will become true if the innermost loop never breaks
-			cout << "	Checking line segment (" << set[i].x << "," << set[i].y << ") to (" << set[j].x << "," << set[j].y << ") ----------" << endl;
+			cout << "	Checking line segment " << set[i] << " to " << set[j] << " ----------" << endl;
 			
 			//Calculate the line segment formed by points i and j
 			//using the formula ax + by = c, where a = y2 - y1, b = x1 - x2, and c = x1y2 - y1x2
 			//Point 1 (i) will form (x1, y1) and Point 2 (j) will form (x2, y2)
 			
-			int a = set[j].y - set[i].y; 	// a = y2 - y1
-			int b = set[i].x - set[j].x;	// b = x1 - x2
-			int c = (set[i].x * set[j].y) - (set[i].y * set[j].x); // c = x1y2 - y1x2 
+			int a = set[j].gety() - set[i].gety(); 	// a = y2 - y1
+			int b = set[i].getx() - set[j].getx();	// b = x1 - x2
+			int c = (set[i].getx() * set[j].gety()) - (set[i].gety() * set[j].getx()); // c = x1y2 - y1x2 
 			
 			//Now examine all points to see if they're above, below, or on the line using the formula ax + by - c,
 			//where x = set[k].x and y = set[k].y
@@ -60,9 +68,9 @@ void bruteForceCH(list<Point>& set, int size, list<Point>& result){
 					cout << "k = " << k << endl;
 					//cout << "			sign2 = " << sign2 << "; sign1 = " << sign1 << endl;
 					
-					cout << "			Looking at point (" << set[k].x << "," << set[k].y << ")" << endl;
+					cout << "			Looking at point " << set[k] << endl;
 					
-					int val = (a * set[k].x) + (b * set[k].y) - c;	//Calculating the formula
+					int val = (a * set[k].getx()) + (b * set[k].gety()) - c;	//Calculating the formula
 					cout << "				This point value is " << val << endl;
 					
 					//Now check whether the value is above, below, or on the line
@@ -70,7 +78,7 @@ void bruteForceCH(list<Point>& set, int size, list<Point>& result){
 					if(val > 0) isLeft = true;
 					else if(val < 0) isRight = true;
 					else {
-						if((set[k].x < set[i].x) || (set[k].x > set[j].x)) {
+						if((set[k].getx() < set[i].getx()) || (set[k].getx() > set[j].getx())) {
 							isHull = false;
 							break;
 						}
@@ -95,8 +103,8 @@ void bruteForceCH(list<Point>& set, int size, list<Point>& result){
 			
 			//If we reach here, the line segment must be part of the convex hull, so add it to the set
 			if(isHull) {
-			cout << "Adding point (" <<  set[j].x << "," <<  set[j].y << ")" << endl; cout << endl;
-			result.push_back(set[i]); result.push_back(set[j]);
+			cout << "Adding point (" <<  set[j] << endl; cout << endl;
+			convexhull.push_back(set[i]); convexhull.push_back(set[j]);
 		
 		
 	
@@ -114,7 +122,7 @@ void bruteForceCH(list<Point>& set, int size, list<Point>& result){
 }
 
 
-void quickhullCH(list<Point>& set, int size, list<Point>& result){
+void quickhullCH(cdpoint::cdpoint *set, int size){
 	
 	
 }
@@ -125,26 +133,25 @@ int main(int argc, char **argv)
 	
 	//Create an array of 10 - 110 randomized points using the point struct
 	int size = rand() % 100 + 10;
-	list<point> coordSet;
+	cdpoint::cdpoint coordSet[size];
 	cout << "Created a set of size " << size << endl;
 	
 	//Create and assign a pointer var to reference the array later on
-	//point *setptr;
-	//setptr = coordSet;
+	cdpoint::cdpoint *setptr;
+	setptr = coordSet;
 	
 	//Fill the array with randomized points
 	fillSet(coordSet, size);
 	
 	
 	//Determine the convex hull with the brute force algorithm
-	list<point> bruteForceSet;
 	//point *bfsetptr = bruteForceSet;		//Passing the function a pointer to indirectly return a list of points with
-	bruteForceCH(coordSet, size, bruteForceSet);
+	bruteForceCH(setptr, size);
 	
 	//Determine the convex hull with the quickhull algorithm
-	list<point> quickhullSet;
+	//list<point> quickhullSet;
 	//point *qhsetptr = quickhullSet;			//Passing the function a pointer to indirectly return a list of points with
-	quickhullCH(coordSet, size, quickhullSet);
+	//quickhullCH(coordSet, size, quickhullSet);
 	 
 	 
 	 /*point set[7] = {{0,0},{2,5},{-3,-2},{4,-1},{-5,3},{-1,6},{-1,3}};
@@ -155,9 +162,7 @@ int main(int argc, char **argv)
 	 
 	 cout << "done" << endl;
 	 
-	for(auto coord : bruteForceSet) {
-		cout << "(" << coord.x << "," << coord.y << ") " << endl;
-	}
+	
 	
 
 	 
