@@ -24,5 +24,5 @@ public:
 };
 
 }
-
+ 
 #endif // POINT_HPP
