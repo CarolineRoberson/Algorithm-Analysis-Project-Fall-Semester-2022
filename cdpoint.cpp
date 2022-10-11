@@ -1,30 +1,30 @@
-#include "Point.hpp"
+#include "cdpoint.hpp"
 #include <iostream>
 
 using namespace std;
 
-namespace point {
+namespace cdpoint {
 
-Point::Point(int xx, int yy) {
+cdpoint::cdpoint(int xx, int yy) {
 		x = xx;
 		y = yy;
 }
 
-Point::~Point(){
+cdpoint::~cdpoint(){
 }
 	
-bool operator >(const Point& p1, const Point& p2) { 
+bool operator >(const cdpoint& p1, const cdpoint& p2) { 
 	if(p1.x > p2.x) { return true; } 
 	else if(p1.x == p2.x) { return(p1.y > p2.y); }
 	else return false;
 }
-bool operator <(const Point& p1, const Point& p2) { 
+bool operator <(const cdpoint& p1, const cdpoint& p2) { 
 	return !(p1 > p2);	// reuses code from the above overload
 }
-bool operator ==(const Point& p1, const Point& p2) { 
+bool operator ==(const cdpoint& p1, const cdpoint& p2) { 
 	return((p1.x == p2.x) && (p1.y == p2.y));
 }
-ostream& operator << (ostream& outs, const Point& source){
+ostream& operator << (ostream& outs, const cdpoint& source){
 	outs << "(" << source.x << "," << source.y << ")";
 }
 
