@@ -1,28 +1,31 @@
-#ifndef POINT_HPP
-#define POINT_HPP
+#ifndef CDPOINT_HPP
+#define CDPOINT_HPP
 
 #include <iostream>
-using namespace std;
 
-namespace point
+namespace cdpoint
 {
 
-class Point
+class cdpoint
 {
 private:
 	int x;
 	int y;
 public:
-	Point(int x, int y);
-	~Point();
+	cdpoint();
+	cdpoint(int x, int y);
+	~cdpoint();
 	
-	friend bool operator >(const Point& p1, const Point& p2);
-	friend bool operator <(const Point& p1, const Point& p2);
-	friend bool operator ==(const Point& p1, const Point& p2);
-	friend ostream& operator << (ostream& out, const Point& source);
+	const int getx() { return x; }
+	const int gety() { return y; }
+	
+	friend bool operator >(const cdpoint& p1, const cdpoint& p2);
+	friend bool operator <(const cdpoint& p1, const cdpoint& p2);
+	friend bool operator ==(const cdpoint& p1, const cdpoint& p2);
+	friend std::ostream& operator << (std::ostream& out, const cdpoint& source);
 
 };
 
 }
- 
-#endif // POINT_HPP
+
+#endif // CDPOINT_HPP
