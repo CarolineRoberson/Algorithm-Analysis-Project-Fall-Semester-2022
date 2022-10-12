@@ -1,9 +1,10 @@
 #include "cdpoint.hpp"
 #include <iostream>
 
-using namespace std;
 
 namespace cdpoint {
+	
+cdpoint::cdpoint() { } //default constructor
 
 cdpoint::cdpoint(int xx, int yy) {
 		x = xx;
@@ -24,7 +25,7 @@ bool operator <(const cdpoint& p1, const cdpoint& p2) {
 bool operator ==(const cdpoint& p1, const cdpoint& p2) { 
 	return((p1.x == p2.x) && (p1.y == p2.y));
 }
-ostream& operator << (ostream& outs, const cdpoint& source){
+std::ostream& operator << (std::ostream& outs, const cdpoint& source){
 	outs << "(" << source.x << "," << source.y << ")";
 }
 
