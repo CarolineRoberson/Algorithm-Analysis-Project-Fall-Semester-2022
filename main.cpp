@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <cstdlib>
 #include <iostream>
-#include <list>
+//#include <list>
+//#include <algorithm>
 #include "cdpoint.hpp"
 
 using namespace std;
@@ -27,9 +28,39 @@ cdpoint::cdpoint* fillSet(cdpoint::cdpoint *set, int size){
 	
 }
 
-bool inSet(cdpoint::cdpoint coord, cdpoint::cdpoint set[]) {
+bool inSet(cdpoint::cdpoint coord, cdpoint::cdpoint set[], int size) {
 	
-	//in the set?
+	for(int i = 0; i < size; i++) {
+		
+		if(set[i] == coord) return true;
+		
+	}
+	
+	return false;
+	
+}
+
+cdpoint::cdpoint* sort(cdpoint::cdpoint *set, int size) {
+	
+	cdpoint::cdpoint temp;
+	int min;
+	for(int i = 0; i < size - 1; i++) {
+		min = i;
+		
+		for(int j = i+1; j < size; j++){
+			if(set[j] < set[min]) min = j;
+		}
+		
+		if(min != i) {
+			temp = set[i];
+			set[i] = set[min];
+			set[min] = temp;
+		}
+		
+	}
+	
+	return set;
+	
 }
 
 cdpoint::cdpoint* bruteForceCH(cdpoint::cdpoint *set, int size, cdpoint::cdpoint *convexhull){
@@ -103,12 +134,10 @@ cdpoint::cdpoint* bruteForceCH(cdpoint::cdpoint *set, int size, cdpoint::cdpoint
 			
 			//If we reach here, the line segment must be part of the convex hull, so add it to the set
 			if(isHull) {
-				cout << "answer_index = " << answer_index << "; answer_index + 1 = " << answer_index+1 << "answer_index + 2 = " << answer_index+2 << endl;
-				cout << "Adding points " <<  set[i] << "," << set[j] << endl; cout << endl;
-				if(!inSet(set[j], convexhull)) { convexhull[++answer_index] = set[j]; }
-				//convexhull[answer_index] = set[i]; 
-			
-				answer_index++;
+				//cout << "answer_index = " << answer_index << "; answer_index + 1 = " << answer_index+1 << "answer_index + 2 = " << answer_index+2 << endl;
+				cout << "Trying to add points " <<  set[i] << "," << set[j] << endl;
+				if(!inSet(set[j], convexhull, size)) { cout << "Successfully added point " << set[j] << endl; convexhull[answer_index++] = set[j]; }
+				if(!inSet(set[i], convexhull, size)) { cout << "Successfully added point " << set[i] << endl; convexhull[answer_index++] = set[i]; }
 				
 				for(int i = 0; i < 7; i ++) { cout << convexhull[i] << " " << endl; }
 	
@@ -149,9 +178,8 @@ int main(int argc, char **argv)
 	fillSet(coordSet, size);*/
 	
 	//Create a set to store the convex hull
-	cdpoint::cdpoint convexhull[7];
-	cdpoint::cdpoint *answer;
-	answer = convexhull;
+	int size = 7;
+	cdpoint::cdpoint convexhull[size];
 	//Determine the convex hull with the brute force algorithm
 	//point *bfsetptr = bruteForceSet;		//Passing the function a pointer to indirectly return a list of points with
 	//bruteForceCH(setptr, size, answer);
@@ -162,15 +190,16 @@ int main(int argc, char **argv)
 	//quickhullCH(coordSet, size, quickhullSet);
 	 
 	 
-	 cdpoint::cdpoint set[7] = {{0,0},{2,5},{-3,-2},{4,-1},{-5,3},{-1,6},{-1,3}};
-	 cdpoint::cdpoint *setptr;
-	 setptr = set;
+	 cdpoint::cdpoint set[size] = {{0,0},{2,5},{-3,-2},{4,-1},{-5,3},{-1,6},{-1,3}};
+	 cout<< "Before: " << endl; for(int i = 0; i < size; i ++) { cout << set[i] << " " << endl; }
+	 sort(set, size);
+	 cout<< "After: " << endl; for(int i = 0; i < size; i ++) { cout << set[i] << " " << endl; }
 	 //cdpoint::cdpoint convexhull[7];
-	 bruteForceCH(setptr, 7, convexhull);
+	 bruteForceCH(set, size, convexhull);
 	 
 	 cout << "done" << endl;
 	 
-	 for(int i = 0; i < 7; i ++) { cout << convexhull[i] << " " << endl; }
+	 for(int i = 0; i < size; i ++) { cout << convexhull[i] << " " << endl; }
 	 
 	
 	
