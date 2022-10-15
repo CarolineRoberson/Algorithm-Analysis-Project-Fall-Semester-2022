@@ -6,7 +6,7 @@ namespace cdpoint {
 	
 cdpoint::cdpoint() { } //default constructor
 
-cdpoint::cdpoint(int xx, int yy) {
+cdpoint::cdpoint(float xx, float yy) {
 		x = xx;
 		y = yy;
 }
