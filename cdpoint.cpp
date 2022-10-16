@@ -1,5 +1,6 @@
 #include "cdpoint.hpp"
 #include <iostream>
+#include <list>
 
 
 namespace cdpoint {
@@ -25,8 +26,15 @@ bool operator <(const cdpoint& p1, const cdpoint& p2) {
 bool operator ==(const cdpoint& p1, const cdpoint& p2) { 
 	return((p1.x == p2.x) && (p1.y == p2.y));
 }
+bool operator !=(const cdpoint& p1, const cdpoint& p2) { 
+	return((p1.x != p2.x) || (p1.y != p2.y));
+}
+bool operator !=(const std::list<cdpoint>::iterator& p1, const cdpoint& p2) { 
+	return((p1->x != p2.x) || (p1->y != p2.y));
+}
 std::ostream& operator << (std::ostream& outs, const cdpoint& source){
 	outs << "(" << source.x << "," << source.y << ")";
+	return outs;
 }
 
 
