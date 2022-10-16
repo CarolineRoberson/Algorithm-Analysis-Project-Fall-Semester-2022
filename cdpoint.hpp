@@ -2,6 +2,7 @@
 #define CDPOINT_HPP
 
 #include <iostream>
+#include <list>
 
 namespace cdpoint
 {
@@ -9,8 +10,8 @@ namespace cdpoint
 class cdpoint
 {
 private:
-	float x;
-	float y;
+	float x = -1000;
+	float y = 1000;
 public:
 	cdpoint();
 	cdpoint(float x, float y);
@@ -25,6 +26,8 @@ public:
 	friend bool operator >(const cdpoint& p1, const cdpoint& p2);
 	friend bool operator <(const cdpoint& p1, const cdpoint& p2);
 	friend bool operator ==(const cdpoint& p1, const cdpoint& p2);
+	friend bool operator !=(const cdpoint& p1, const cdpoint& p2);
+	friend bool operator !=(const std::list<cdpoint>::iterator& p1, const cdpoint& p2);
 	friend std::ostream& operator << (std::ostream& out, const cdpoint& source);
 
 };
